@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AA Freelance</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e8;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    h1, h2, h3, h4, h5 { font-family: 'Space Grotesk', sans-serif; line-height: 1.15; }
+
+    /* ===== CUSTOM PROPERTIES ===== */
+    :root {
+      --accent: #7c5cfc;
+      --accent-light: #a78bfa;
+      --accent-glow: rgba(124, 92, 252, .25);
+      --accent2: #06d6a0;
+      --accent2-glow: rgba(6, 214, 160, .2);
+      --surface: #13131d;
+      --surface2: #1a1a28;
+      --surface3: #222234;
+      --border: rgba(255,255,255,.07);
+      --text: #e0e0e8;
+      --text-dim: #9a9ab0;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 4px 30px rgba(0,0,0,.4);
+      --max-w: 1200px;
+      --nav-h: 72px;
+    }
+
+    /* ===== UTILITIES ===== */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+    .section { padding: 100px 0; }
+    .section-label {
+      display: inline-block; font-size: .75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 3px; color: var(--accent-light); margin-bottom: 12px;
+    }
+    .section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 16px; color: #fff; }
+    .section-sub { font-size: 1.05rem; color: var(--text-dim); max-width: 600px; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .section-sub { margin: 0 auto; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 50px; font-weight: 600; font-size: .95rem;
+      border: none; cursor: pointer; transition: all .3s ease; font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #9b7afc);
+      color: #fff; box-shadow: 0 4px 24px var(--accent-glow);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
+    .btn-outline {
+      background: transparent; color: #fff;
+      border: 1.5px solid rgba(255,255,255,.2);
+    }
+    .btn-outline:hover { border-color: var(--accent-light); color: var(--accent-light); }
+    .btn-sm { padding: 10px 22px; font-size: .85rem; }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-h);
+      background: rgba(10, 10, 15, .82); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); z-index: 1000;
+      transition: background .3s;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+    .logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .logo-img { height: 38px; width: auto; max-width: 140px; object-fit: contain; display: block; transition: transform .25s ease; }
+    .logo:hover .logo-img { transform: scale(1.04); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { font-size: .9rem; font-weight: 500; color: var(--text-dim); transition: color .3s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta { margin-left: 8px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all .3s; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; padding-top: var(--nav-h);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, var(--accent-glow) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 60%, var(--accent2-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero .container { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; position: relative; z-index: 1; }
+    .hero-text h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 900; color: #fff; margin-bottom: 20px; }
+    .hero-text h1 .highlight {
+      background: linear-gradient(135deg, var(--accent-light), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-text p { font-size: 1.1rem; color: var(--text-dim); margin-bottom: 32px; max-width: 520px; }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 50px; font-size: .78rem; font-weight: 600;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim);
+    }
+    .hero-tag i { color: var(--accent-light); font-size: .7rem; }
+    .hero-visual { position: relative; display: flex; justify-content: center; }
+    .hero-graphic {
+      width: 100%; max-width: 480px; aspect-ratio: 1;
+      border-radius: 32px; position: relative;
+      background: linear-gradient(145deg, var(--surface2), var(--surface));
+      border: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 28px;
+    }
+    .hero-card {
+      border-radius: var(--radius-sm); padding: 20px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px; text-align: center;
+      background: var(--surface3); border: 1px solid var(--border);
+      transition: transform .3s, border-color .3s;
+    }
+    .hero-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .hero-card i { font-size: 1.6rem; }
+    .hero-card:nth-child(1) i { color: #e1306c; }
+    .hero-card:nth-child(2) i { color: #06d6a0; }
+    .hero-card:nth-child(3) i { color: #fbbf24; }
+    .hero-card:nth-child(4) i { color: var(--accent-light); }
+    .hero-card:nth-child(5) i { color: #f472b6; }
+    .hero-card:nth-child(6) i { color: #38bdf8; }
+    .hero-card span { font-size: .75rem; font-weight: 600; color: var(--text-dim); }
+
+    /* ===== ABOUT / TEAM ===== */
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; margin-bottom: 40px; }
+    .team-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 36px 28px; text-align: center; transition: transform .3s, border-color .3s;
+    }
+    .team-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+    .team-avatar {
+      width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;
+      overflow: hidden; border: 3px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 6px 24px var(--accent-glow);
+    }
+    .team-avatar img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block;
+    }
+    .team-card h3 { font-size: 1.4rem; color: #fff; margin-bottom: 4px; }
+    .team-card .role { font-size: .85rem; color: var(--accent-light); font-weight: 600; margin-bottom: 16px; }
+    .team-card ul { text-align: left; display: inline-block; }
+    .team-card ul li { font-size: .88rem; color: var(--text-dim); padding: 3px 0; }
+    .team-card ul li::before { content: '✦ '; color: var(--accent-light); font-size: .7rem; }
+    .team-statement {
+      text-align: center; font-size: 1.15rem; font-weight: 500; color: var(--text-dim);
+      font-style: italic; max-width: 560px; margin: 0 auto;
+    }
+    .team-statement span { color: var(--accent-light); }
+
+    /* ===== SERVICES ===== */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .service-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 32px 24px; transition: transform .3s, border-color .3s;
+    }
+    .service-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 20px;
+    }
+    .service-card:nth-child(1) .service-icon { background: rgba(124, 92, 252, .15); color: var(--accent-light); }
+    .service-card:nth-child(2) .service-icon { background: rgba(6, 214, 160, .15); color: var(--accent2); }
+    .service-card:nth-child(3) .service-icon { background: rgba(251, 191, 36, .15); color: #fbbf24; }
+    .service-card:nth-child(4) .service-icon { background: rgba(244, 114, 182, .15); color: #f472b6; }
+    .service-card h3 { font-size: 1.15rem; color: #fff; margin-bottom: 12px; }
+    .service-card ul li { font-size: .88rem; color: var(--text-dim); padding: 3px 0; }
+    .service-card ul li::before { content: '— '; color: var(--accent-light); }
+
+    /* ===== PACKAGES ===== */
+    #packages { background: linear-gradient(180deg, #0a0a0f 0%, #0e0e1a 50%, #0a0a0f 100%); }
+    .pkg-category-title {
+      font-size: 1.5rem; font-weight: 700; color: #fff; text-align: center; margin: 56px 0 32px;
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+    }
+    .pkg-category-title i { color: var(--accent-light); font-size: 1.35rem; }
+    .pkg-category-title:first-of-type { margin-top: 0; }
+    .pkg-category-title::before, .pkg-category-title::after {
+      content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--border);
+    }
+    .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+    .pkg-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 36px 28px; position: relative; overflow: hidden;
+      transition: transform .3s, border-color .3s;
+      display: flex; flex-direction: column;
+    }
+    .pkg-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+    .pkg-card.featured { border-color: var(--accent); }
+    .pkg-card.featured::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .pkg-badge {
+      position: absolute; top: 16px; right: -30px; transform: rotate(45deg);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      padding: 4px 40px; letter-spacing: 1px;
+    }
+    .pkg-card h3 { font-size: 1.3rem; color: #fff; margin-bottom: 4px; }
+    .pkg-card .pkg-desc { font-size: .85rem; color: var(--text-dim); margin-bottom: 20px; }
+    .pkg-card .pkg-price {
+      font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 4px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .pkg-card .pkg-period { font-size: .8rem; color: var(--text-dim); margin-bottom: 24px; }
+    .pkg-card ul { margin-bottom: 28px; flex: 1; }
+    .pkg-card ul li { font-size: .88rem; color: var(--text-dim); padding: 5px 0; display: flex; align-items: flex-start; gap: 8px; }
+    .pkg-card ul li::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
+    .pkg-card .btn { width: 100%; justify-content: center; }
+
+    /* Individual pricing */
+    .individual-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .indiv-card {
+      flex: 0 1 265px;
+      width: 265px;
+      max-width: 100%;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px 24px; transition: transform .3s, border-color .3s;
+    }
+    .indiv-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .indiv-card h4 { font-size: 1.05rem; color: #fff; margin-bottom: 4px; }
+    .indiv-card .indiv-sub { font-size: .82rem; color: var(--text-dim); margin-bottom: 14px; }
+    .indiv-card .indiv-price { font-size: 1.3rem; font-weight: 700; color: var(--accent-light); font-family: 'Space Grotesk'; }
+    .indiv-card .indiv-note { font-size: .78rem; color: var(--text-dim); margin-top: 6px; font-style: italic; }
+    .indiv-cta { text-align: center; margin-top: 36px; }
+    .pkg-note { text-align: center; margin-top: 24px; font-size: .9rem; color: var(--text-dim); font-style: italic; }
+    .pkg-note i { color: var(--accent-light); margin-right: 4px; }
+    .custom-pkg {
+      text-align: center; margin-top: 40px; padding: 40px 24px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .custom-pkg h3 { font-size: 1.4rem; color: #fff; margin-bottom: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+    .custom-pkg h3 i { color: var(--accent-light); font-size: 1.25rem; }
+    .custom-pkg p { color: var(--text-dim); font-size: .95rem; margin-bottom: 20px; }
+
+    /* ===== OUR WORKS ===== */
+    .works-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 28px;
+    }
+    .work-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, var(--surface2), var(--surface));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      max-width: 520px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+      text-decoration: none;
+      transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    }
+    .work-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 36px var(--accent-glow);
+    }
+    .work-card-glow {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+    .work-icon-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: rgba(124, 92, 252, .15);
+      border: 1px solid rgba(124, 92, 252, .3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-light);
+      font-size: 1.5rem;
+      transition: all .3s ease;
+    }
+    .work-card:hover .work-icon-wrap {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      transform: scale(1.08);
+      border-color: transparent;
+    }
+    .work-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .work-card-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent2);
+    }
+    .work-card-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .work-card-desc {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .work-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--accent-light);
+      transition: all .3s ease;
+    }
+    .work-card:hover .work-card-link {
+      color: #fff;
+      transform: translateX(4px);
+    }
+    .work-card-link i {
+      font-size: 0.85rem;
+      transition: transform .3s ease;
+    }
+    .work-card:hover .work-card-link i {
+      transform: translate(2px, -2px);
+    }
+
+    /* ===== WHY US ===== */
+    .why-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+    }
+    .why-card {
+      flex: 0 1 265px;
+      width: 265px;
+      max-width: 100%;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px 22px; text-align: center; transition: transform .3s, border-color .3s;
+    }
+    .why-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .why-card .why-icon { font-size: 1.5rem; margin-bottom: 14px; color: var(--accent-light); }
+    .why-card h4 { font-size: 1rem; color: #fff; margin-bottom: 6px; }
+    .why-card p { font-size: .85rem; color: var(--text-dim); }
+
+    /* ===== PROCESS ===== */
+    .process-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .process-card {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      text-align: center;
+      position: relative;
+      transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+    .process-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+    .process-num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+    .process-card h4 { font-size: 1.15rem; color: #fff; margin-bottom: 8px; }
+    .process-card p { font-size: .88rem; color: var(--text-dim); line-height: 1.5; }
+    .process-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-light);
+      font-size: 1.15rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      transition: all .3s ease;
+    }
+    .process-arrow:hover {
+      color: var(--accent2);
+      border-color: var(--accent2);
+      transform: scale(1.1);
+    }
+
+    /* ===== CONTACT ===== */
+    #contact { background: linear-gradient(180deg, #0a0a0f 0%, #0e0e1a 100%); }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; }
+    .contact-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 36px 28px; text-align: center; transition: transform .3s, border-color .3s;
+    }
+    .contact-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+    .contact-avatar {
+      width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk';
+      overflow: hidden; border: 2.5px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 18px var(--accent-glow);
+    }
+    .contact-avatar img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block;
+    }
+    .contact-card h3 { font-size: 1.3rem; color: #fff; margin-bottom: 4px; }
+    .contact-card .role { font-size: .82rem; color: var(--accent-light); font-weight: 600; margin-bottom: 20px; }
+    .contact-info { margin-bottom: 24px; }
+    .contact-info a {
+      display: flex; align-items: center; gap: 10px; justify-content: center;
+      padding: 6px 0; font-size: .9rem; color: var(--text-dim); transition: color .3s;
+    }
+    .contact-info a:hover { color: #fff; }
+    .contact-info a i { width: 20px; text-align: center; color: var(--accent-light); }
+    .contact-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .contact-btns .btn { padding: 10px 20px; font-size: .85rem; }
+    .btn-whatsapp { background: #25d366; color: #fff; }
+    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-2px); }
+    .btn-call { background: var(--surface3); color: #fff; border: 1px solid var(--border); }
+    .btn-call:hover { border-color: var(--accent-light); transform: translateY(-2px); }
+    .btn-email { background: var(--surface3); color: #fff; border: 1px solid var(--border); }
+    .btn-email:hover { border-color: var(--accent-light); transform: translateY(-2px); }
+    .btn-insta { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: #fff; }
+    .btn-insta:hover { transform: translateY(-2px); opacity: .9; }
+
+    /* ===== FINAL CTA ===== */
+    .final-cta {
+      text-align: center; padding: 80px 24px;
+      background: linear-gradient(135deg, rgba(124,92,252,.12) 0%, rgba(6,214,160,.08) 100%);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .final-cta h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); color: #fff; margin-bottom: 12px; }
+    .final-cta p { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 28px; }
+
+    /* ===== FOOTER ===== */
+    .footer { padding: 48px 24px; text-align: center; border-top: 1px solid var(--border); }
+    .footer .logo { margin-bottom: 12px; display: inline-flex; justify-content: center; }
+    .footer .logo-img { height: 46px; }
+    .footer .tagline { font-size: .85rem; color: var(--text-dim); margin-bottom: 20px; }
+    .footer-socials { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; }
+    .footer-socials a {
+      width: 42px; height: 42px; border-radius: 50%; background: var(--surface2);
+      border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim); font-size: 1rem; transition: all .3s;
+    }
+    .footer-socials a:hover { color: #fff; border-color: var(--accent); transform: translateY(-2px); }
+    .footer .copy { font-size: .78rem; color: var(--text-dim); }
+
+    /* ===== MOBILE NAV OVERLAY ===== */
+    .mobile-menu {
+      display: none; position: fixed; top: var(--nav-h); left: 0; width: 100%; height: calc(100vh - var(--nav-h));
+      background: rgba(10, 10, 15, .97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 28px; z-index: 999;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 1.2rem; font-weight: 600; color: var(--text-dim); transition: color .3s; }
+    .mobile-menu a:hover { color: #fff; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .hero .container { grid-template-columns: 1fr; text-align: center; }
+      .hero-text p { margin: 0 auto 32px; }
+      .hero-btns { justify-content: center; }
+      .hero-tags { justify-content: center; }
+      .hero-visual { margin-top: 40px; }
+      .hero-graphic { max-width: 380px; }
+      .process-flow { flex-direction: column; max-width: 440px; margin: 0 auto; gap: 14px; }
+      .process-card { width: 100%; }
+      .process-arrow { transform: rotate(90deg); }
+      .process-arrow:hover { transform: rotate(90deg) scale(1.1); }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .section { padding: 72px 0; }
+      .hero-graphic { grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; }
+      .pkg-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+      .team-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto 40px; }
+      .contact-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+      .indiv-card { flex: 0 1 280px; width: 280px; }
+      .why-card { flex: 0 1 240px; width: 240px; }
+    }
+    @media (max-width: 480px) {
+      .hero-graphic { padding: 14px; gap: 10px; }
+      .hero-card { padding: 14px 10px; }
+      .hero-card i { font-size: 1.3rem; }
+      .hero-card span { font-size: .68rem; }
+      .why-card { flex: 0 1 100%; width: 100%; }
+      .indiv-card { flex: 0 1 100%; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="#" class="logo" aria-label="AA Home"><img src="logo-nav.png" alt="AA" class="logo-img" /></a>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#packages">Packages</a>
+      <a href="#works">Our Works</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="btn btn-primary btn-sm nav-cta">Let's Work Together</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" onclick="closeMenu()">Home</a>
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#packages" onclick="closeMenu()">Packages</a>
+  <a href="#works" onclick="closeMenu()">Our Works</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="#contact" class="btn btn-primary" onclick="closeMenu()">Let's Work Together</a>
+</div>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero section" id="home">
+  <div class="container">
+    <div class="hero-text">
+      <h1>We Help Brands <span class="highlight">Grow &amp; Stand Out</span> Online.</h1>
+      <p>Social media growth, creative content, and professional design — all handled by one creative team.</p>
+      <div class="hero-btns">
+        <a href="#packages" class="btn btn-primary">View Packages</a>
+        <a href="#contact" class="btn btn-outline">Contact Us</a>
+      </div>
+      <div class="hero-tags">
+        <span class="hero-tag"><i class="fas fa-circle"></i> Social Media Growth</span>
+        <span class="hero-tag"><i class="fas fa-circle"></i> Content Design</span>
+        <span class="hero-tag"><i class="fas fa-circle"></i> Branding</span>
+        <span class="hero-tag"><i class="fas fa-circle"></i> Creative Strategy</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-graphic">
+        <div class="hero-card"><i class="fab fa-instagram"></i><span>Instagram</span></div>
+        <div class="hero-card"><i class="fas fa-chart-line"></i><span>Analytics</span></div>
+        <div class="hero-card"><i class="fas fa-palette"></i><span>Design</span></div>
+        <div class="hero-card"><i class="fas fa-video"></i><span>Content</span></div>
+        <div class="hero-card"><i class="fas fa-bullhorn"></i><span>Branding</span></div>
+        <div class="hero-card"><i class="fas fa-pen-nib"></i><span>Strategy</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABOUT / TEAM ==================== -->
+<section class="section" id="team">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">About Our Team</span>
+      <h2 class="section-title">Meet the Team</h2>
+      <p class="section-sub">A creative freelance team helping businesses build a stronger social media presence through strategy, content, and design.</p>
+    </div>
+    <div class="team-grid">
+      <!-- TEAM MEMBER 1 — AKHIL -->
+      <div class="team-card reveal">
+        <div class="team-avatar"><img src="akhil.jpg" alt="Akhil - Content Planner, Videographer & Designer" /></div>
+        <h3>AKHIL</h3>
+        <div class="role">Content Planner, Videographer &amp; Designer</div>
+        <ul>
+          <li>Social media strategy</li>
+          <li>Content planning</li>
+          <li>Growth strategy</li>
+          <li>Audience engagement</li>
+          <li>Analytics</li>
+          <li>Client communication</li>
+          <li>Video Shooting</li>
+          <li>Graphic Designing</li>
+          <li>Motion Graphics Designing</li>
+          <li>2D Animation</li>
+        </ul>
+      </div>
+      <!-- TEAM MEMBER 2 — ANOOP -->
+      <div class="team-card reveal">
+        <div class="team-avatar"><img src="anoop.jpg" alt="Anoop - Video Editor" /></div>
+        <h3>ANOOP</h3>
+        <div class="role">Video Editor</div>
+        <ul>
+          <li>Social media managing</li>
+          <li>Video Editing</li>
+          <li>Stories</li>
+          <li>Visual content</li>
+          <li>Content Creation</li>
+        </ul>
+      </div>
+    </div>
+    <p class="team-statement reveal">"Two friends. Different skills. One goal — <span>helping your brand grow.</span>"</p>
+  </div>
+</section>
+
+<!-- ==================== SERVICES ==================== -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">What We Do</span>
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-sub">Everything your brand needs to grow online — strategy, content, design, and creative direction.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+        <h3>Social Media Growth</h3>
+        <ul>
+          <li>Social media strategy</li>
+          <li>Profile optimization</li>
+          <li>Content planning</li>
+          <li>Audience growth strategy</li>
+          <li>Engagement strategy</li>
+          <li>Performance analysis</li>
+        </ul>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
+        <h3>Social Media Design</h3>
+        <ul>
+          <li>Instagram posts</li>
+          <li>Reels</li>
+          <li>Stories</li>
+          <li>Reel covers</li>
+          <li>Promotional creatives</li>
+        </ul>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="fas fa-lightbulb"></i></div>
+        <h3>Content Creation</h3>
+        <ul>
+          <li>Content ideas</li>
+          <li>Captions</li>
+          <li>Content calendars</li>
+          <li>Campaign concepts</li>
+          <li>Short-form content ideas</li>
+        </ul>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="fas fa-star"></i></div>
+        <h3>Branding &amp; Creative Design</h3>
+        <ul>
+          <li>Social media branding</li>
+          <li>Posters</li>
+          <li>Banners</li>
+          <li>Promotional graphics</li>
+          <li>Visual identity</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PACKAGES ==================== -->
+<section class="section" id="packages">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title">Our Packages</h2>
+      <p class="section-sub">Transparent pricing. Pick a plan that fits your needs, or let's create a custom one.</p>
+    </div>
+
+    <!-- ——— DESIGN PACKAGES ——— -->
+    <h3 class="pkg-category-title reveal"><i class="fa-regular fa-pen-to-square"></i> Design Packages</h3>
+    <div class="pkg-grid">
+      <!-- STARTER -->
+      <div class="pkg-card reveal">
+        <h3>STARTER</h3>
+        <p class="pkg-desc">For businesses beginning their social media journey.</p>
+        <div class="pkg-price">₹7,500</div>
+        <div class="pkg-period">per month</div>
+        <ul>
+          <li>4 social media posts</li>
+          <li>12 stories</li>
+          <li>2 Reels (Video must be provided by client)</li>
+          <li>Content planning</li>
+          <li>Basic social media strategy</li>
+          <li>Caption/hashtag suggestions</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Get Started</a>
+      </div>
+      <!-- GROWTH -->
+      <div class="pkg-card featured reveal">
+        <span class="pkg-badge">Most Popular</span>
+        <h3>GROWTH</h3>
+        <p class="pkg-desc">For businesses looking for consistent social media growth.</p>
+        <div class="pkg-price">₹13,500</div>
+        <div class="pkg-period">per month</div>
+        <ul>
+          <li>8 social media designs</li>
+          <li>18 stories</li>
+          <li>4 reels</li>
+          <li>1 Motion Graphics Video</li>
+          <li>Content calendar</li>
+          <li>Social media strategy</li>
+          <li>Monthly performance analysis</li>
+          <li>1 On location shoot session</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Choose Growth</a>
+      </div>
+      <!-- PREMIUM -->
+      <div class="pkg-card reveal">
+        <h3>PREMIUM</h3>
+        <p class="pkg-desc">For brands wanting a complete social media solution.</p>
+        <div class="pkg-price">₹25,000</div>
+        <div class="pkg-period">per month</div>
+        <ul>
+          <li>12 social media designs</li>
+          <li>30 stories</li>
+          <li>8 reels [Weekly 2 reels] (Shooting+Editing)</li>
+          <li>2 Motion Graphics Videos</li>
+          <li>1 2D Animation Video</li>
+          <li>Complete content calendar</li>
+          <li>Social media strategy</li>
+          <li>Branding &amp; creative direction</li>
+          <li>Performance analysis</li>
+          <li>2 On location shoot sessions</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Let's Talk</a>
+      </div>
+    </div>
+
+    <!-- ——— REEL PACKAGES ——— -->
+    <h3 class="pkg-category-title reveal"><i class="fa-regular fa-circle-play"></i> Reel Packages</h3>
+    <div class="pkg-grid">
+      <!-- STARTER -->
+      <div class="pkg-card reveal">
+        <h3>STARTER</h3>
+        <p class="pkg-desc">Get started with weekly reels for your brand.</p>
+        <div class="pkg-price">₹8,500</div>
+        <div class="pkg-period">per month</div>
+        <ul>
+          <li>4 Reels [weekly 1 reel] (Shooting+Editing)</li>
+          <li>Content planning</li>
+          <li>1 On location shoot session</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Get Started</a>
+      </div>
+      <!-- GROWTH -->
+      <div class="pkg-card featured reveal">
+        <span class="pkg-badge">Most Popular</span>
+        <h3>GROWTH</h3>
+        <p class="pkg-desc">Consistent reel content for serious growth.</p>
+        <div class="pkg-price">₹14,500</div>
+        <div class="pkg-period">per month</div>
+        <ul>
+          <li>8 reels [weekly 2 reels] (Shooting+Editing)</li>
+          <li>Content planning</li>
+          <li>Monthly performance analysis</li>
+          <li>2 On location shoot sessions</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Choose Growth</a>
+      </div>
+      <!-- PREMIUM -->
+      <div class="pkg-card reveal">
+        <h3>PREMIUM</h3>
+        <p class="pkg-desc">Maximum reel output for fast-growing brands.</p>
+        <div class="pkg-price">₹20,000</div>
+        <div class="pkg-period">per month</div>
+        <ul>
+          <li>12 reels [weekly 3 reels] (Shooting+Editing)</li>
+          <li>Content planning</li>
+          <li>Performance analysis</li>
+          <li>3 On location shoot sessions</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Let's Talk</a>
+      </div>
+    </div>
+
+    <!-- CUSTOM PACKAGE -->
+    <div class="custom-pkg reveal">
+      <h3><i class="fa-regular fa-paper-plane"></i> Custom Package</h3>
+      <p>Need something different? Let's build a package that fits your brand perfectly.</p>
+      <a href="#contact" class="btn btn-primary">Let's Discuss</a>
+    </div>
+
+    <!-- ——— INDIVIDUAL PRICING ——— -->
+    <h3 class="pkg-category-title reveal"><i class="fa-regular fa-credit-card"></i> Individual Pricing</h3>
+    <div class="individual-grid">
+      <div class="indiv-card reveal">
+        <h4>Instagram Reel / Short Video (Editing)</h4>
+        <p class="indiv-sub">30 Second Reel/Shorts</p>
+        <div class="indiv-price">₹1,200 <span style="font-size:.8rem;font-weight:400;color:var(--text-dim)">/Reel</span></div>
+        <p class="indiv-note">Video must be provided by client</p>
+      </div>
+      <div class="indiv-card reveal">
+        <h4>Instagram Reel / Short Video (Shooting + Editing)</h4>
+        <p class="indiv-sub">30 Second Reel/Shorts</p>
+        <div class="indiv-price" style="margin-bottom:6px;">₹1,800 <span style="font-size:.8rem;font-weight:400;color:var(--text-dim)">/Reel</span></div>
+        <p class="indiv-note" style="font-style:normal; color:var(--text-dim);">Using iPhone</p>
+        <div class="indiv-price" style="margin-top:10px;">₹2,300 <span style="font-size:.8rem;font-weight:400;color:var(--text-dim)">/Reel</span></div>
+        <p class="indiv-note" style="font-style:normal; color:var(--text-dim);">Using Professional Camera</p>
+      </div>
+      <div class="indiv-card reveal">
+        <h4>Social Media Post Designing</h4>
+        <p class="indiv-sub">Custom-designed posts for your feed</p>
+        <div class="indiv-price">₹350 <span style="font-size:.8rem;font-weight:400;color:var(--text-dim)">/Post</span></div>
+      </div>
+      <div class="indiv-card reveal">
+        <h4>Social Media Story Design</h4>
+        <p class="indiv-sub">Branded story designs</p>
+        <div class="indiv-price">₹250 <span style="font-size:.8rem;font-weight:400;color:var(--text-dim)">/Story</span></div>
+      </div>
+      <div class="indiv-card reveal">
+        <h4>Motion Graphics Video</h4>
+        <p class="indiv-sub">Animated explainer &amp; promo videos</p>
+        <div class="indiv-price">Starting from ₹3,000 <span style="font-size:.8rem;font-weight:400;color:var(--text-dim)">/Minute</span></div>
+      </div>
+      <div class="indiv-card reveal">
+        <h4>2D Animation</h4>
+        <p class="indiv-sub">Custom 2D animated videos</p>
+        <div class="indiv-price">Starting from ₹7,500 <span style="font-size:.8rem;font-weight:400;color:var(--text-dim)">/Minute</span></div>
+      </div>
+    </div>
+
+    <div class="indiv-cta reveal">
+      <a href="#contact" class="btn btn-primary">Connect</a>
+    </div>
+
+    <p class="pkg-note reveal"><i class="fas fa-camera"></i> Note: We use Professional Cameras for package shootings.</p>
+  </div>
+</section>
+
+<!-- ==================== OUR WORKS ==================== -->
+<section class="section" id="works">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Portfolio</span>
+      <h2 class="section-title">Our Works</h2>
+      <p class="section-sub">Explore our creative work, video editing projects, and visual content crafted for brands.</p>
+    </div>
+    <div class="works-grid">
+      <!-- Reel Edits Box -->
+      <a href="https://drive.google.com/drive/folders/1Of065oz_xruzV1FZ4ttZxs-ARORzt-9f?usp=sharing" target="_blank" rel="noopener noreferrer" class="work-card reveal">
+        <div class="work-card-glow"></div>
+        <div class="work-icon-wrap">
+          <i class="fa-regular fa-circle-play"></i>
+        </div>
+        <div class="work-card-content">
+          <div class="work-card-tag">Portfolio Link</div>
+          <h3 class="work-card-title">Reel Edits</h3>
+          <p class="work-card-desc">Browse our curated collection of short-form Instagram Reels, viral video edits, cuts, and motion visuals.</p>
+          <div class="work-card-link">
+            <span>View Drive Folder</span>
+            <i class="fas fa-arrow-up-right-from-square"></i>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WHY US ==================== -->
+<section class="section" id="whyus">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Why Us</span>
+      <h2 class="section-title">Why Work With Us?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+        <h4>Creative</h4>
+        <p>Fresh and engaging ideas.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fas fa-user"></i></div>
+        <h4>Personal</h4>
+        <p>Direct communication with the people doing the work.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fas fa-bullseye"></i></div>
+        <h4>Strategic</h4>
+        <p>Content created with your business goals in mind.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fas fa-sliders"></i></div>
+        <h4>Flexible</h4>
+        <p>Packages can be customized to your needs.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fas fa-rotate"></i></div>
+        <h4>Consistent</h4>
+        <p>Regular content and communication.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fas fa-handshake"></i></div>
+        <h4>Collaborative</h4>
+        <p>Two different skill sets working together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROCESS ==================== -->
+<section class="section" id="process">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Our Process</h2>
+    </div>
+    <div class="process-flow">
+      <div class="process-card reveal">
+        <div class="process-num">01</div>
+        <h4>Discuss</h4>
+        <p>We understand your business, audience, and goals.</p>
+      </div>
+      <div class="process-arrow reveal">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">02</div>
+        <h4>Plan</h4>
+        <p>We create a suitable social media and content strategy.</p>
+      </div>
+      <div class="process-arrow reveal">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">03</div>
+        <h4>Create</h4>
+        <p>We design and prepare your content.</p>
+      </div>
+      <div class="process-arrow reveal">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">04</div>
+        <h4>Grow</h4>
+        <p>We publish, analyze performance, and improve the strategy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ==================== CONTACT ==================== -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Get In Touch</span>
+      <h2 class="section-title">Let's Work Together</h2>
+      <p class="section-sub">Have a project in mind? Talk to either of us and let's discuss how we can help your brand grow.</p>
+    </div>
+    <div class="contact-grid">
+
+      <!-- ——— AKHIL ——— -->
+      <div class="contact-card reveal">
+        <div class="contact-avatar"><img src="akhil.jpg" alt="Akhil - Content Planner, Videographer & Designer" /></div>
+        <h3>AKHIL</h3>
+        <div class="role">Content Planner, Videographer &amp; Graphic Designer</div>
+        <div class="contact-info">
+          <!-- EDITABLE: Akhil's phone -->
+          <a href="tel:+919746718461"><i class="fas fa-phone"></i> +91 97467 18461</a>
+          <!-- EDITABLE: Akhil's WhatsApp -->
+          <a href="https://wa.me/919746718461?text=Hi!%20I%20found%20your%20website%20and%20I'm%20interested%20in%20your%20social%20media%2Fdesign%20services.%20I'd%20like%20to%20discuss%20a%20project." target="_blank"><i class="fab fa-whatsapp"></i> +91 97467 18461</a>
+          <!-- EDITABLE: Akhil's email -->
+          <a href="mailto:creatorakhilrs@gmail.com"><i class="fas fa-envelope"></i> creatorakhilrs@gmail.com</a>
+          <!-- EDITABLE: Akhil's Instagram -->
+          <a href="https://www.instagram.com/akhhilrs" target="_blank"><i class="fab fa-instagram"></i> @akhhilrs</a>
+        </div>
+        <div class="contact-btns">
+          <a href="https://wa.me/919746718461?text=Hi!%20I%20found%20your%20website%20and%20I'm%20interested%20in%20your%20social%20media%2Fdesign%20services.%20I'd%20like%20to%20discuss%20a%20project." target="_blank" class="btn btn-sm btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="tel:+919746718461" class="btn btn-sm btn-call"><i class="fas fa-phone"></i> Call</a>
+          <a href="mailto:creatorakhilrs@gmail.com" class="btn btn-sm btn-email"><i class="fas fa-envelope"></i> Email</a>
+          <a href="https://www.instagram.com/akhhilrs" target="_blank" class="btn btn-sm btn-insta"><i class="fab fa-instagram"></i> Instagram</a>
+        </div>
+      </div>
+
+      <!-- ——— ANOOP ——— -->
+      <div class="contact-card reveal">
+        <div class="contact-avatar"><img src="anoop.jpg" alt="Anoop - Video Editor" /></div>
+        <h3>ANOOP</h3>
+        <div class="role">Video Editor</div>
+        <div class="contact-info">
+          <!-- EDITABLE: Anoop's phone -->
+          <a href="tel:+917736719006"><i class="fas fa-phone"></i> +91 77367 19006</a>
+          <!-- EDITABLE: Anoop's WhatsApp -->
+          <a href="https://wa.me/917736719006?text=Hi!%20I%20found%20your%20website%20and%20I'm%20interested%20in%20your%20social%20media%2Fdesign%20services.%20I'd%20like%20to%20discuss%20a%20project." target="_blank"><i class="fab fa-whatsapp"></i> +91 77367 19006</a>
+          <!-- EDITABLE: Anoop's Instagram -->
+          <a href="https://www.instagram.com/alpu_fx" target="_blank"><i class="fab fa-instagram"></i> @alpu_fx</a>
+        </div>
+        <div class="contact-btns">
+          <a href="https://wa.me/917736719006?text=Hi!%20I%20found%20your%20website%20and%20I'm%20interested%20in%20your%20social%20media%2Fdesign%20services.%20I'd%20like%20to%20discuss%20a%20project." target="_blank" class="btn btn-sm btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="tel:+917736719006" class="btn btn-sm btn-call"><i class="fas fa-phone"></i> Call</a>
+          <a href="mailto:" class="btn btn-sm btn-email"><i class="fas fa-envelope"></i> Email</a>
+          <a href="https://www.instagram.com/alpu_fx" target="_blank" class="btn btn-sm btn-insta"><i class="fab fa-instagram"></i> Instagram</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FINAL CTA ==================== -->
+<section class="final-cta reveal">
+  <h2>Your Brand Deserves Better Content.</h2>
+  <p>Let's create something that gets noticed.</p>
+  <a href="#contact" class="btn btn-primary">Start a Conversation</a>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <a href="#" class="logo" aria-label="AA Home"><img src="logo-nav.png" alt="AA" class="logo-img" /></a>
+  <p class="tagline">Social Media Growth • Content • Design</p>
+  <div class="footer-socials">
+    <!-- EDITABLE: Footer social links -->
+    <a href="https://www.instagram.com/akhhilrs" target="_blank" aria-label="Akhil's Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.instagram.com/alpu_fx" target="_blank" aria-label="Anoop's Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/919746718461?text=Hi!%20I%20found%20your%20website%20and%20I'm%20interested%20in%20your%20social%20media%2Fdesign%20services.%20I'd%20like%20to%20discuss%20a%20project." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <a href="mailto:creatorakhilrs@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+  </div>
+  <p class="copy">&copy; 2026 AA. All rights reserved.</p>
+</footer>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+  /* — Mobile Menu — */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* — Scroll Reveal — */
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  /* — Navbar active link — */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? '#fff' : '';
+    });
+  });
+
+
+
+</script>
+
+</body>
+</html>
